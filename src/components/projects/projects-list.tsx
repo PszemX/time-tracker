@@ -192,7 +192,7 @@ export default function ProjectsList() {
 	return (
 		<Card className="w-full">
 			<CardHeader className="flex flex-row items-center justify-between">
-				<CardTitle>Lista projektów</CardTitle>
+				<CardTitle>Projects list</CardTitle>
 				<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 					<DialogTrigger asChild>
 						<Button>
