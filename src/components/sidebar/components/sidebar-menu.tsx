@@ -2,7 +2,7 @@
 
 import { Ellipsis, LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { CollapseMenuButton } from "@/components/sidebar/components/collapse-menu-button";
 import { Button } from "@/components/ui/button";
@@ -20,8 +20,22 @@ interface MenuProps {
 }
 
 export function Menu({ isOpen }: MenuProps) {
+	const router = useRouter();
 	const pathname = usePathname();
 	const menuList = getMenuList(pathname);
+
+	const handleSignOut = async (): Promise<void> => {
+		try {
+			const response = await fetch("/api/logout", { method: "POST" });
+			if (response.ok) {
+				router.push("/login");
+			} else {
+				throw new Error("Cannot sign out");
+			}
+		} catch (error) {
+			console.error("Cannot sign out:", error);
+		}
+	};
 
 	return (
 		<nav className="h-full w-full">
@@ -151,7 +165,7 @@ export function Menu({ isOpen }: MenuProps) {
 						<Tooltip delayDuration={100}>
 							<TooltipTrigger asChild>
 								<Button
-									onClick={() => {}}
+									onClick={handleSignOut}
 									variant="outline"
 									className="mt-5 h-10 w-full justify-center"
 								>
@@ -175,7 +189,10 @@ export function Menu({ isOpen }: MenuProps) {
 								</Button>
 							</TooltipTrigger>
 							{isOpen === false && (
-								<TooltipContent side="right">
+								<TooltipContent
+									side="right"
+									onClick={handleSignOut}
+								>
 									Sign out
 								</TooltipContent>
 							)}
